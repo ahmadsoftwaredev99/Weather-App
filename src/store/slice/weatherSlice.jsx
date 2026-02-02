@@ -19,7 +19,7 @@ export const weatherApi = createAsyncThunk(
 const weatherSlice = createSlice({
   name: "weatherSlice",
   initialState: {
-    weatherData: null,
+    data: null,
     loading: false,
     error: null,
   },
@@ -31,7 +31,7 @@ const weatherSlice = createSlice({
       })
       .addCase(weatherApi.fulfilled, (state, action) => {
         state.loading = false;
-        state.weatherData = action.payload;
+        state.data = action.payload;
       })
       .addCase(weatherApi.rejected, (state, action) => {
         state.loading = false;

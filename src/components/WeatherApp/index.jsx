@@ -11,24 +11,22 @@ import "./weather.css";
 const WeatherApp = () => {
   const { Title, Paragraph } = Typography;
   const dispatch = useDispatch();
-  const data = useSelector((store) => store.weatherSlice.weatherData);
+  const {data , loading , error} = useSelector((store) => store.weatherSlice);
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
 
-  useEffect(() => {
+ useEffect(() => {
   if (data?.main && data?.wind && data?.weather) {
-    const iconCode = data.weather[0].icon; // eg: 10d
-
     setWeather({
       humidity: data.main.humidity,
       windSpeed: Math.round(data.wind.speed * 3.6),
       temprature: Math.round(data.main.temp),
       location: data.name,
-      iconCode: iconCode,
-      iconUrl: `https://openweathermap.org/img/wn/${iconCode}@2x.png`,
+      iconUrl: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`, // fix here
     });
   }
 }, [data]);
+
 
 
   const handleClick = () => {
@@ -50,7 +48,24 @@ const WeatherApp = () => {
             </div>
           </Col>
 
-          {data ? (
+          {/* Loader */}
+          {loading && (
+            <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
+              <Loader />
+            </Col>
+          )}
+
+          {/* Error */}
+          {error && (
+            <Col span={24}>
+              <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+            </Col>
+          )}
+
+
+
+
+          {weather && !error && (
             <>
               <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
                 <img src={weather?.iconUrl} alt="weather" width={150} />
@@ -81,8 +96,6 @@ const WeatherApp = () => {
                 </div>
               </Col>
             </>
-          ) : (
-            <Loader/>
           )}
         </Row>
       </Card>
