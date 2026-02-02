@@ -50,8 +50,8 @@ useEffect(() => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <div style={{ display: "flex", gap: 8 }}>
-              <Input value={city} onChange={(e) => setCity(e.target.value)} type="search"placeholder="Search"className="rounded-pill"/>
-              <Button icon={<SearchOutlined />} className="rounded-circle"onClick={handleClick}/>
+              <Input onPressEnter={handleClick} value={city} onChange={(e) => setCity(e.target.value)} type="search"placeholder="Search"className="rounded-pill"/>
+              {/* <Button icon={<SearchOutlined />} className="rounded-circle"onClick={handleClick} /> */}
             </div>
           </Col>
           {data && !error ? (
