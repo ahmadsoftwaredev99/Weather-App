@@ -28,6 +28,7 @@ const weatherSlice = createSlice({
     builder
       .addCase(weatherApi.pending, (state, action) => {
         state.loading = true;
+        state.error = null
       })
       .addCase(weatherApi.fulfilled, (state, action) => {
         state.loading = false;
@@ -35,7 +36,7 @@ const weatherSlice = createSlice({
       })
       .addCase(weatherApi.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload || "City Not Found ";
       });
   },
 });

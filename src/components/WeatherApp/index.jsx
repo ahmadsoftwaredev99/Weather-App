@@ -5,27 +5,34 @@ import { weatherApi } from "../../store/slice/weatherSlice";
 import { useDispatch, useSelector } from "react-redux";
 import humidity_pic from "/humidity.png";
 import wind_pic from "/wind.png";
-import Loader from "../Loader";
 import "./weather.css";
 
 const WeatherApp = () => {
   const { Title, Paragraph } = Typography;
   const dispatch = useDispatch();
-  const {data , loading , error} = useSelector((store) => store.weatherSlice);
+  const {data, error} = useSelector((store) => store.weatherSlice);
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState(null);
 
- useEffect(() => {
-  if (data?.main && data?.wind && data?.weather) {
+  const [weather, setWeather] = useState({});
+   
+useEffect(() => {
+  if (error) {
+    message.error("City not found");
+    return;
+  }
+
+  if (data && data.main) {
     setWeather({
       humidity: data.main.humidity,
       windSpeed: Math.round(data.wind.speed * 3.6),
       temprature: Math.round(data.main.temp),
       location: data.name,
-      iconUrl: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`, // fix here
+      iconUrl: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
     });
   }
-}, [data]);
+}, [data, error]);
+
+
 
 
 
@@ -33,7 +40,7 @@ const WeatherApp = () => {
     if (!city.trim()) {
       return message.error("Enter City Name");
     }
-    dispatch(weatherApi(city));
+    dispatch(weatherApi(city))
   };
 
   return (
@@ -47,25 +54,7 @@ const WeatherApp = () => {
               <Button icon={<SearchOutlined />} className="rounded-circle"onClick={handleClick}/>
             </div>
           </Col>
-
-          {/* Loader */}
-          {loading && (
-            <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
-              <Loader />
-            </Col>
-          )}
-
-          {/* Error */}
-          {error && (
-            <Col span={24}>
-              <p style={{ color: "red", textAlign: "center" }}>{error}</p>
-            </Col>
-          )}
-
-
-
-
-          {weather && !error && (
+          {data && !error ? (
             <>
               <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
                 <img src={weather?.iconUrl} alt="weather" width={150} />
@@ -96,6 +85,8 @@ const WeatherApp = () => {
                 </div>
               </Col>
             </>
+          ):(
+            <></>
           )}
         </Row>
       </Card>
