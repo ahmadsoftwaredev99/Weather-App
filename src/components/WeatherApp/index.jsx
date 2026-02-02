@@ -1,10 +1,11 @@
 import { Button, Card, Col, Form, Input, message, Row, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import humidity_pic from "/humidity.png";
-import wind_pic from "/wind.png";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { weatherApi } from "../../store/slice/weatherSlice";
 import { useDispatch, useSelector } from "react-redux";
+import humidity_pic from "/humidity.png";
+import wind_pic from "/wind.png";
+import Loader from "../Loader";
 import "./weather.css";
 
 const WeatherApp = () => {
@@ -81,7 +82,7 @@ const WeatherApp = () => {
               </Col>
             </>
           ) : (
-            <> </>
+            <Loader/>
           )}
         </Row>
       </Card>
